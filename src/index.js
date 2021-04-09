@@ -27,38 +27,40 @@ function getBetterIndividuals(arr, quantity, elitismQuantity) {
 
     const output = elitism.concat(selection);
 
-    output.map(e=> e.printIndividual())
+    output.map(e => e.printIndividual())
 
     return output
 }
 
 
 console.log('\n\nINITIAL POPULATION')
-const ramdomPopulation = getRandomPopulation(10)
+var mainPopulation = getRandomPopulation(10)
 
-console.log('\n\nSELECTED POPULATION')
-const bettersIndividuals = getBetterIndividuals(ramdomPopulation, 5, 2); // 5 selections, and 2 betters  
+for (let i = 0; i < 5; i++) {
+    console.log('\n\nSELECTED POPULATION')
+    const bettersIndividuals = getBetterIndividuals(mainPopulation, 5, 2); // 5 selections, and 2 betters  
 
-console.log('\n\nCROSS-OVED POPULATION')
-const crossOvedIndividuals = bettersIndividuals.map(mainIndividual => {
-    const otherIndividual = bettersIndividuals[parseInt(Math.random() * (bettersIndividuals.length - 0) + 0)]
-    const newIndividual = mainIndividual.handleCrossOver(otherIndividual)
-    newIndividual.printIndividual()
+    console.log('\n\nCROSS-OVED POPULATION')
+    const crossOvedIndividuals = bettersIndividuals.map(mainIndividual => {
+        const otherIndividual = bettersIndividuals[parseInt(Math.random() * (bettersIndividuals.length - 0) + 0)]
+        const newIndividual = mainIndividual.handleCrossOver(otherIndividual)
+        newIndividual.printIndividual()
 
-    return newIndividual;
-})
+        return newIndividual;
+    })
 
-console.log('\n\nMUTATED POPULATION')
-const mutatedIndividuals = crossOvedIndividuals.map(individual => {
-    individual.handleMutation()
-    individual.printIndividual()
-    return individual
-})
+    console.log('\n\nMUTATED POPULATION')
+    const mutatedIndividuals = crossOvedIndividuals.map(individual => {
+        individual.handleMutation()
+        individual.printIndividual()
+        return individual
+    })
 
-const newPupulation = bettersIndividuals.concat(mutatedIndividuals);
+    mainPopulation = bettersIndividuals.concat(mutatedIndividuals);
 
-console.log('\n\nNEW POPULATION')
-newPupulation.map(individual => individual.printIndividual())
+    console.log('\n\nNEW POPULATION')
+    mainPopulation.map(individual => individual.printIndividual())
+}
 
 
 

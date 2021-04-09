@@ -37,9 +37,9 @@ module.exports = class RGBIndividual {
             g: (this.g + otherIndividual.g) / 2,
             b: (this.b + otherIndividual.b) / 2,
         }
-        const  newIndividual = new RGBIndividual(medIndividual.r, medIndividual.g, medIndividual.b)
+        const newIndividual = new RGBIndividual(medIndividual.r, medIndividual.g, medIndividual.b)
         newIndividual.getIndividualFitness()
-        
+
         return newIndividual
     }
 
