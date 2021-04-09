@@ -2,10 +2,12 @@ const RGBIndividual = require('./classes/RGBIndividual')
 
 function getRandomIndividual() {
     const individual = new RGBIndividual(
-        Math.random() * (255 - 0) + 0, // gene 1
-        Math.random() * (255 - 0) + 0, // gene 2
-        Math.random() * (255 - 0) + 0, // gene 3
+        parseInt(Math.random() * (255 - 0) + 0), // gene 1
+        parseInt(Math.random() * (255 - 0) + 0), // gene 2
+        parseInt(Math.random() * (255 - 0) + 0), // gene 3
     )
+    individual.getIndividualFitness()
+    individual.printIndividual()
     return individual
 }
 
@@ -13,31 +15,50 @@ function getRandomPopulation(size) {
     const arr = [];
     for (let i = 0; i < size; i++)
         arr.push(getRandomIndividual())
-
     return arr;
 }
 
 function getBetterIndividuals(arr, quantity, elitismQuantity) {
+    // GET ELITIMS
     const elitism = arr.sort((a, b) => b.fitness - a.fitness).slice(0, elitismQuantity);
 
+    // GET SELECTION INDIVIDUALS
     const selection = arr.sort((a, b) => b.fitness - a.fitness).slice(0, quantity);
 
-    Array.prototype.push.apply(selection, elitism)
+    const output = elitism.concat(selection);
 
-    return selection
-}
+    output.map(e=> e.printIndividual())
 
-function handleMutation (individual) {
-
-}
-
-function handleCrossOver (individual) {
-    
+    return output
 }
 
 
-const population = getRandomPopulation(10)
+console.log('\n\nINITIAL POPULATION')
+const ramdomPopulation = getRandomPopulation(10)
 
-const bettersIndividualsOfPopulation = getBetterIndividuals(population, 5, 2); // 5 selections, and 2 betters  
+console.log('\n\nSELECTED POPULATION')
+const bettersIndividuals = getBetterIndividuals(ramdomPopulation, 5, 2); // 5 selections, and 2 betters  
 
-console.log(bettersIndividualsOfPopulation)
+console.log('\n\nCROSS-OVED POPULATION')
+const crossOvedIndividuals = bettersIndividuals.map(mainIndividual => {
+    const otherIndividual = bettersIndividuals[parseInt(Math.random() * (bettersIndividuals.length - 0) + 0)]
+    const newIndividual = mainIndividual.handleCrossOver(otherIndividual)
+    newIndividual.printIndividual()
+
+    return newIndividual;
+})
+
+console.log('\n\nMUTATED POPULATION')
+const mutatedIndividuals = crossOvedIndividuals.map(individual => {
+    individual.handleMutation()
+    individual.printIndividual()
+    return individual
+})
+
+const newPupulation = bettersIndividuals.concat(mutatedIndividuals);
+
+console.log('\n\nNEW POPULATION')
+newPupulation.map(individual => individual.printIndividual())
+
+
+
